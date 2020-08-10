@@ -1,0 +1,4 @@
+<h1 *ngIf="errMsg">404 Section not found</h1>
+<h1>{{section.title}}</h1>
+<h5>{{section.id}}</h5>
+<h3 *ngFor="let card of section.cards">{{card.title}} ({{card.id}})</h3>

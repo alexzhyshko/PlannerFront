@@ -1,0 +1,4 @@
+<h1 *ngIf="errMsg">404 Dashboard not found</h1>
+<h1>{{dashboard.title}}</h1>
+<h5>{{dashboard.id}}</h5>
+<h3 *ngFor="let section of dashboard.sections" (click)="loadSection(section.id)">{{section.title}} ({{section.id}})</h3>

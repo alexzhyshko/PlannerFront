@@ -1,0 +1,4 @@
+<h1 *ngIf="errMsg">404 User not found</h1>
+<h1>{{user.username}}</h1>
+<h5>{{user.id}}</h5>
+<h3 *ngFor="let card of user.cards">{{card.title}}</h3>
