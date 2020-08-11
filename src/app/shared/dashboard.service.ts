@@ -3,6 +3,7 @@ import { DashboardDTO } from "./DashboardDTO";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "./storage.service";
+import { CreateSectionPayload } from "./create-section.payload";
 
 @Injectable({
   providedIn: 'root'
@@ -17,4 +18,12 @@ export class DashboardService {
     var username = this.storage.getUsername();
     return this.httpClient.get<DashboardDTO>(this.baseUrl+'/dashboard/by-user/'+username+"/"+id);
   }
+
+  addSection(dashboardid: string, sectionTitle: string): Observable<any>{
+    const createSectionPayload = {
+      title: sectionTitle
+    }
+    return this.httpClient.post(this.baseUrl+"/dashboard/createSection/"+dashboardid, createSectionPayload);
+  }
+
 }

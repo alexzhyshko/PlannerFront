@@ -1,22 +1,19 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark justify-content-between">
   <a class="navbar-brand" href="/">
     <img src="assets/img/logo.png" width="40" height="40" class="d-inline-block align-top" alt="">
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav mr-auto">
-      <!-- has to be empty, don't remove this ul-->
-    </ul>
-    <div *ngIf="!isLoggedIn" class="btn-group" role="group">
+  <div class="float-right" id="navbarText">
+    <div *ngIf="!isLoggedIn" class="btn-group float-right" role="group">
       <button type="button" class="btn btn-light btn-sm" routerLink="/login">Login</button>
       <button type="button" class="btn btn-secondary btn-sm" routerLink="/signup">Sign up</button>
     </div>
-    <div *ngIf="isLoggedIn" class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary btn-sm" (click)="goToUserProfile()">{{user.username}}</button>
-      <button type="button" class="btn btn-secondary btn-sm" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+    <div *ngIf="isLoggedIn" class="btn-group float-right" role="group">
+      <button type="button" class="btn btn-secondary btn-sm float-right" (click)="goToUserProfile()"><a class="btn btn-sm btn-info" style="border-radius: 70%;">{{user.username[0].toUpperCase()}} </a> {{user.username}}</button>
+      <button type="button" class="btn btn-secondary btn-sm float-right" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
     </div>
   </div>
 </nav>
+
+
+
 <router-outlet></router-outlet>

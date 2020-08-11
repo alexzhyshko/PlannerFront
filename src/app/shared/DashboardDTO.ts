@@ -6,4 +6,5 @@ export interface DashboardDTO{
   title: string;
   sections: SectionDTO[];
   users: UserDTO[];
+  creatorId: string;
 }

@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   isError: boolean;
 
   constructor(authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute,
-  private toastr: ToastrService) {
+    private toastr: ToastrService) {
     this.authService = authService;
     this.loginRequestPayload = {
       username: '',
@@ -43,14 +43,15 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  login(){
+  login() {
     this.loginRequestPayload.username = this.loginForm.get('username').value;
     this.loginRequestPayload.password = this.loginForm.get('password').value;
     this.authService.login(this.loginRequestPayload).subscribe(data => {
       if (data) {
         this.isError = false;
-        this.router.navigateByUrl('/');
+        this.router.navigate(['/'], {queryParams: {loggedIn: true}})
         this.toastr.success('Login Successful');
+
       } else {
         this.isError = true;
       }

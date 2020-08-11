@@ -1,21 +1,20 @@
 <div role="button" style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3">
-    <button type="button" (click)="joinDashboard()" style="margin-right: 10px;" class="btn btn-lg btn-dark"><i class="fa fa-plus"></i></button>
+    <button type="button" (click)="addDashboard()" style="margin-right: 10px;" class="btn btn-lg btn-dark"><i class="fa fa-plus"></i></button>
 </div>
 
-<div role="button" style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3" *ngFor="let dashboard of dashboards ">
-  <div class="card-header">
-    <h2>{{dashboard.title}}</h2><i class="text-muted">by {{dashboard.creator.username}}</i>
+<div style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3" *ngFor="let dashboard of dashboards ">
+  <div role="button" (click)="loadDashboard(dashboard.id)" class="card-header" title="Click to open dashboard">
+    <h2>{{dashboard.title}}</h2>
   </div>
-  <div *ngIf="dashboard.sections[0]===undefined" class="card-body border-info">
+  <div role="text" *ngIf="dashboard.sections[0]===undefined" class="card-body border-info">
     No content yet
   </div>
-  <div *ngIf="dashboard.sections[0]!==undefined" class="card-body border-info">
-    <p style="margin-top: 10px;" class="card-text">Section(-s):</p>
+  <div role="text" *ngIf="dashboard.sections[0]!==undefined" class="card-body border-info">
     <div *ngIf="dashboard.sections[0]!==undefined" class="card-header border-info ">
-      {{dashboard.sections[0].title}}
+      <span class="card-text">  {{dashboard.sections[0].title}} </span><i class="card-text text-muted"> ({{dashboard.sections[0].cards.length}} card(-s))</i>
     </div>
     <div *ngIf="dashboard.sections[1]!==undefined" class="card-header border-info">
-      {{dashboard.sections[1].title}}
+      <span class="card-text">{{dashboard.sections[1].title}} </span><i class="card-text text-muted"> ({{dashboard.sections[1].cards.length}} card(-s))</i>
     </div>
     <div *ngIf="dashboard.sections.length>2" class="card-header border-info">
       And {{dashboard.sections.length-2}} more...
@@ -23,9 +22,12 @@
 
   </div>
   <div class="card-footer">
-    <button type="button" (click)="loadDashboard(dashboard.id)" style="margin-right: 10px;" class="btn btn-sm btn-info">Open</button>
-    <button (click)="addSection()" class="btn btn-sm btn-success" style="margin-right: 10px;" role="button" type="button"><i class="fa fa-plus"></i></button>
-    <button (click)="deleteDashboard(dashboard.id)" *ngIf="user.id === dashboard.creator.id"  class="btn btn-sm btn-danger" style="margin-right: 10px;" role="button" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+    <!-- <button type="button" (click)="loadDashboard(dashboard.id)" style="margin-right: 10px;" class="btn btn-sm btn-info bg-dark" title="Open this dashboard">Open</button> -->
+    <button (click)="addSection(dashboard.id)" class="btn btn-sm btn-success bg-dark" style="margin-right: 10px;" role="button" type="button" title="Add a section to this dashboard"><i class="fa fa-plus"></i></button>
+    <button (click)="leaveDashboard(dashboard.id, user.id)" class="btn btn-sm btn-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+    <button (click)="deleteDashboard(dashboard.id)" *ngIf="user.id === dashboard.creatorId"  class="btn btn-sm btn-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash" aria-hidden="true"></i></button>
   </div>
+
+
 
 </div>

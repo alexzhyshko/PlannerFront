@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../shared/user.service";
+import { DashboardService } from "../../shared/dashboard.service";
 import { StorageService } from "../../shared/storage.service";
 import { DashboardDTO } from "../../shared/DashboardDTO";
 import { UserDTO } from "../../shared/UserDTO";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
@@ -17,13 +19,17 @@ export class HomeComponent implements OnInit {
 
   constructor(private storage: StorageService,
     private userService: UserService,
-    private router: Router) { }
+    private dashboardService: DashboardService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.userService.getCurrentUser().subscribe(data => {
       this.user = data;
       this.dashboards = data.dashboards;
     });
+
+    
 
   }
 
@@ -32,24 +38,41 @@ export class HomeComponent implements OnInit {
     this.router.navigateByUrl("/dashboard/" + id);
   }
 
-  addSection() {
-    console.log("add");
+
+  leaveDashboard(dashboardid: string, userid: string) {
+    this.userService.leaveDashboard(dashboardid, userid).subscribe(data => {
+
+    });
+    window.location.reload();
+  }
+
+  addSection(id: string) {
+
+    var sectionTitle = prompt("Please input section title");
+    if (sectionTitle.trim() !== '') {
+      this.dashboardService.addSection(id, sectionTitle).subscribe(data => {
+
+      });
+      window.location.reload();
+
+    }
+
 
   }
 
   deleteDashboard(id: string) {
+
     if (confirm("Are you sure you want to delete this dashboard?")) {
       this.userService.deleteDashboard(id).subscribe(data => {
-        console.log(data);
+
       });
       window.location.reload();
     }
 
   }
 
-  joinDashboard() {
-    console.log("join");
-
+  addDashboard() {
+    this.router.navigateByUrl("/add-dashboard");
   }
 
 }

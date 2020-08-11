@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './component/header/header.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule }   from '@angular/forms';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './auth/login/login.component';
@@ -41,6 +42,7 @@ import { AddSectionComponent } from './component/add-section/add-section.compone
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgxWebstorageModule.forRoot(),

@@ -1,1 +1,30 @@
-<p>add-dashboard works!</p>
+<div  class="card-deck align-middle">
+  <div class="card text-white bg-dark border-info mt-4">
+    <div class="card-header">
+      <form [formGroup]="createForm" (ngSubmit)="createDashboard()">
+        <div class="form-group">
+          <h5 class="card-title">Create a new dashboard</h5>
+          <p class="card-text">If the desired dashboard doesn't exist, you can create it just by typing here title of new dashboard</p>
+          <label for="dashboardTitle">Dashboard title</label>
+          <input [formControlName]="'title'" type="text" class="form-control text-white bg-dark" id="dashboardTitle" placeholder="Enter dashboard title" required>
+          <small id="emailHelp" class="form-text text-muted">After creating this dashboard you automatically join it.</small>
+        </div>
+        <button type="submit" class="btn btn-dark border-info">Create</button>
+      </form>
+    </div>
+  </div>
+  <div class="card text-white bg-dark border-info mt-4 ml-n1">
+    <div class="card-header">
+      <form [formGroup]="joinForm" (ngSubmit)="joinDashboard()">
+        <div class="form-group">
+          <h5 class="card-title">Join existing dashboard</h5>
+          <p class="card-text">If the desired dashboard already exists, you can join it just by typing here ID of that dashboard</p>
+          <label for="dashboardId">Dashboard ID</label>
+          <input [formControlName]="'id'" type="text" class="form-control text-white bg-dark" id="dashboardId" placeholder="Enter dashboard ID" required>
+          <small id="emailHelp" class="form-text text-muted">This ID can be obtained from the dashboard member.</small>
+        </div>
+        <button type="submit" class="btn btn-dark border-info">Join</button>
+      </form>
+    </div>
+  </div>
+</div>

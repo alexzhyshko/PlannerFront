@@ -11,17 +11,18 @@ import { UserDTO } from "../../shared/UserDTO";
 })
 export class HeaderComponent implements OnInit {
 
-  isLoggedIn: boolean = true;
+  isLoggedIn = true;
   user: UserDTO;
 
   constructor(private authService: AuthService, private router: Router,
   private userService: UserService) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.isLoggedIn();
     this.userService.getCurrentUser().subscribe(data=>{
       this.user = data;
+      this.isLoggedIn = this.authService.isLoggedIn();
     });
+    //this.router.navigateByUrl("/");
   }
 
   goToUserProfile(){
