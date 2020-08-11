@@ -5,7 +5,7 @@ import { StorageService } from "../../shared/storage.service";
 import { DashboardDTO } from "../../shared/DashboardDTO";
 import { UserDTO } from "../../shared/UserDTO";
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -16,21 +16,35 @@ export class HomeComponent implements OnInit {
 
   user: UserDTO;
   dashboards: Array<DashboardDTO> = [];
+  sectionCreate = false;
+  createSectionForm: FormGroup;
+
 
   constructor(private storage: StorageService,
     private userService: UserService,
     private dashboardService: DashboardService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute) {
+
+    this.createSectionForm = new FormGroup({
+      title: new FormControl('', Validators.min(1))
+    });
+
+  }
 
   ngOnInit() {
     this.userService.getCurrentUser().subscribe(data => {
       this.user = data;
       this.dashboards = data.dashboards;
     });
+  }
 
-    
-
+  toggleCreateSection() {
+    if (this.sectionCreate) {
+      this.sectionCreate = false;
+    } else {
+      this.sectionCreate = true;
+    }
   }
 
 
@@ -40,35 +54,23 @@ export class HomeComponent implements OnInit {
 
 
   leaveDashboard(dashboardid: string, userid: string) {
-    this.userService.leaveDashboard(dashboardid, userid).subscribe(data => {
-
-    });
+    this.userService.leaveDashboard(dashboardid, userid).subscribe(data => {});
     window.location.reload();
   }
 
-  addSection(id: string) {
-
-    var sectionTitle = prompt("Please input section title");
-    if (sectionTitle.trim() !== '') {
-      this.dashboardService.addSection(id, sectionTitle).subscribe(data => {
-
-      });
+  addSection(dashboardid: string) {
+    var title = this.createSectionForm.get('title').value;
+    if (title.trim() !== '') {
+      this.dashboardService.addSection(dashboardid, title).subscribe(data => {});
       window.location.reload();
-
     }
-
-
   }
 
   deleteDashboard(id: string) {
-
     if (confirm("Are you sure you want to delete this dashboard?")) {
-      this.userService.deleteDashboard(id).subscribe(data => {
-
-      });
+      this.userService.deleteDashboard(id).subscribe(data => {});
       window.location.reload();
     }
-
   }
 
   addDashboard() {
