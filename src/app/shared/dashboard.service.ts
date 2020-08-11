@@ -26,4 +26,8 @@ export class DashboardService {
     return this.httpClient.post(this.baseUrl+"/dashboard/createSection/"+dashboardid, createSectionPayload);
   }
 
+  deleteSection(sectionid: string): Observable<any>{
+    return this.httpClient.get(this.baseUrl+"/dashboard/removeSection/"+sectionid);
+  }
+
 }

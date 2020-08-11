@@ -35,27 +35,19 @@ export class AddDashboardComponent implements OnInit {
   joinDashboard() {
     var id = this.joinForm.get('id').value;
     if (id.trim() !== '') {
-      this.userService.joinDashboard(id, this.storage.getUsername()).subscribe(data => {
-
-      });
-      window.location.replace(window.location.origin+"/");
+      this.userService.joinDashboard(id, this.storage.getUsername()).subscribe(data => { });
+      window.location.replace(window.location.origin + "/");
       //this.router.navigateByUrl('/');
     }
-    //console.log("join "+id);
-
   }
 
   createDashboard() {
     var title = this.createForm.get('title').value;
     if (title.trim() !== '') {
-      this.userService.createDashboard(title, this.storage.getUsername()).subscribe(data => {
-
-      });
-      this.router.navigateByUrl('/');
-
+      this.userService.createDashboard(title, this.storage.getUsername()).subscribe(data => { });
+      window.location.replace(window.location.origin + "/");
+      //this.router.navigateByUrl('/');
     }
-    //console.log("create "+title);
-
   }
 
 }

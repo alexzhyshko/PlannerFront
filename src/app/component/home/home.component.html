@@ -1,39 +1,48 @@
-<div role="button" style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3">
-  <button type="button" (click)="addDashboard()" style="margin-right: 10px;" class="btn btn-lg btn-dark"><i class="text-info fa fa-plus"></i></button>
-</div>
-
-<div style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3" *ngFor="let dashboard of dashboards ">
-  <div role="button" (click)="loadDashboard(dashboard.id)" class="card-header" title="Click to open dashboard">
-    <h2>{{dashboard.title}}</h2>
+<div class="pr-4 pl-4">
+  <div role="button" style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3">
+    <button type="button" (click)="addDashboard()" style="margin-right: 10px;" class="btn btn-lg btn-dark"><i class="text-info fa fa-plus"></i></button>
   </div>
-  <div role="text" *ngIf="dashboard.sections.length===0" class="card-body border-info">
-    No content yet
-  </div>
-  <div role="text" *ngIf="dashboard.sections[0]!==undefined" class="card-body border-info">
-    <div *ngIf="dashboard.sections[0]!==undefined" class="card-header border-info ">
-      <span class="card-text"> {{dashboard.sections[0].title}} </span><i class="card-text text-muted"> ({{dashboard.sections[0].cards.length}} card(-s))</i>
+  <div style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3" *ngFor="let dashboard of dashboards ">
+    <div role="button" (click)="loadDashboard(dashboard.id)" class="card-header" title="Click to open dashboard">
+      <h2>{{dashboard.title}}</h2>
     </div>
-    <div *ngIf="dashboard.sections[1]!==undefined" class="card-header border-info">
-      <span class="card-text">{{dashboard.sections[1].title}} </span><i class="card-text text-muted"> ({{dashboard.sections[1].cards.length}} card(-s))</i>
+    <div role="text" *ngIf="dashboard.sections.length===0" class="card-body border-info">
+      No content yet
     </div>
-    <div *ngIf="dashboard.sections.length>2" class="card-header border-info">
-      And {{dashboard.sections.length-2}} more...
+    <div role="text" *ngIf="dashboard.sections[0]!==undefined" class="card-body border-info">
+      <div *ngIf="dashboard.sections[0]!==undefined" class="card-header border-info ">
+        <span class="card-text"> {{dashboard.sections[0].title}} </span><i class="card-text text-muted"> ({{dashboard.sections[0].cards.length}} card(-s))</i>
+      </div>
+      <div *ngIf="dashboard.sections[1]!==undefined" class="card-header border-info">
+        <span class="card-text">{{dashboard.sections[1].title}} </span><i class="card-text text-muted"> ({{dashboard.sections[1].cards.length}} card(-s))</i>
+      </div>
+      <div *ngIf="dashboard.sections.length>2" class="card-header border-info">
+        And {{dashboard.sections.length-2}} more...
+      </div>
+    </div>
+    <div class="card-footer">
+      <button (click)="toggleCreateSection(dashboard)" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button" title="Add a section to this dashboard"><i class="fa fa-plus"></i></button>
+      <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm btn-info text-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+      <button (click)="toggleDeleteDashboard(dashboard)" *ngIf="user.id === dashboard.creatorId" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash"
+          aria-hidden="true"></i></button>
+    </div>
+    <div *ngIf="dashboard.sectionCreate" class="card-body border-info  mt-n4">
+      <form class="form-inline my-2 my-lg-0" [formGroup]="createSectionForm" (ngSubmit)="addSection(dashboard.id)">
+        <input [formControlName]="'title'" class="form-control bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Section title" aria-label="Search" required>
+        <button class="btn btn-sm bg-dark border-success text-success my-2 my-sm-0" type="submit">Add</button>
+      </form>
+    </div>
+    <div *ngIf="dashboard.dashboardLeaveFlag" class="card-body border-info  mt-n4">
+      <p class="card-text mb-n3">Are you sure?</p>
+      <br>
+      <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
+      <button (click)="leaveDashboard(dashboard.id, user.id)" class="btn btn-sm bg-dark border-info text-info my-2 my-sm-0 ml-2" type="submit">Leave</button>
+    </div>
+    <div *ngIf="dashboard.deleteDashboardFlag" class="card-body border-info mt-n4">
+      <p class="card-text mb-n3">Are you sure?</p>
+      <br>
+      <button (click)="toggleDeleteDashboard(dashboard)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
+      <button (click)="deleteDashboard(dashboard.id)" class="btn btn-sm bg-dark border-danger text-danger my-2 my-sm-0 ml-2" type="submit">Delete</button>
     </div>
   </div>
-  <div *ngIf="sectionCreate" class="card-body border-info  mt-n4">
-    <form class="form-inline my-2 my-lg-0" [formGroup]="createSectionForm" (ngSubmit)="addSection(dashboard.id)">
-      <input [formControlName]="'title'" class="form-control bg-dark text-success input-sm mr-sm-2" type="search" placeholder="Section title" aria-label="Search" required>
-      <button class="btn btn-sm bg-dark border-success text-success my-2 my-sm-0" type="submit">Add</button>
-    </form>
-  </div>
-  <div class="card-footer">
-    <!-- <button type="button" (click)="loadDashboard(dashboard.id)" style="margin-right: 10px;" class="btn btn-sm btn-info bg-dark" title="Open this dashboard">Open</button> -->
-    <button (click)="toggleCreateSection()" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button" title="Add a section to this dashboard"><i class="fa fa-plus"></i></button>
-    <button (click)="leaveDashboard(dashboard.id, user.id)" class="btn btn-sm btn-info text-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
-    <button (click)="deleteDashboard(dashboard.id)" *ngIf="user.id === dashboard.creatorId" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash"
-        aria-hidden="true"></i></button>
-  </div>
-
-
-
 </div>

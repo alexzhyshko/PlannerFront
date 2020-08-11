@@ -6,4 +6,6 @@ export interface SectionDTO{
   title: string;
   cards: CardDTO[];
   dashboard: DashboardDTO;
+  deleteSectionFlag: boolean;
+  cardCreate: boolean;
 }

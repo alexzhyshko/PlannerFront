@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
   user: UserDTO;
   dashboards: Array<DashboardDTO> = [];
   sectionCreate = false;
+  dashboardLeaveFlag = false;
+  deleteDashboardFlag = false;
   createSectionForm: FormGroup;
 
 
@@ -39,12 +41,16 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  toggleCreateSection() {
-    if (this.sectionCreate) {
-      this.sectionCreate = false;
-    } else {
-      this.sectionCreate = true;
-    }
+  toggleCreateSection(dashboard: DashboardDTO) {
+    dashboard.sectionCreate = !dashboard.sectionCreate;
+  }
+
+  toggleDeleteDashboard(dashboard: DashboardDTO) {
+    dashboard.deleteDashboardFlag = !dashboard.deleteDashboardFlag;
+  }
+
+  toggleLeaveDashboard(dashboard: DashboardDTO) {
+    dashboard.dashboardLeaveFlag = !dashboard.dashboardLeaveFlag;
   }
 
 
@@ -54,23 +60,21 @@ export class HomeComponent implements OnInit {
 
 
   leaveDashboard(dashboardid: string, userid: string) {
-    this.userService.leaveDashboard(dashboardid, userid).subscribe(data => {});
+    this.userService.leaveDashboard(dashboardid, userid).subscribe(data => { });
     window.location.reload();
   }
 
   addSection(dashboardid: string) {
     var title = this.createSectionForm.get('title').value;
     if (title.trim() !== '') {
-      this.dashboardService.addSection(dashboardid, title).subscribe(data => {});
+      this.dashboardService.addSection(dashboardid, title).subscribe(data => { });
       window.location.reload();
     }
   }
 
   deleteDashboard(id: string) {
-    if (confirm("Are you sure you want to delete this dashboard?")) {
-      this.userService.deleteDashboard(id).subscribe(data => {});
-      window.location.reload();
-    }
+    this.userService.deleteDashboard(id).subscribe(data => { });
+    window.location.reload();
   }
 
   addDashboard() {

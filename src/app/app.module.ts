@@ -24,7 +24,10 @@ import { SectionComponent } from './component/section/section.component';
 import { AddDashboardComponent } from './component/add-dashboard/add-dashboard.component';
 import { AddSectionComponent } from './component/add-section/add-section.component';
 
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @NgModule({
   declarations: [
@@ -48,9 +51,14 @@ import { AddSectionComponent } from './component/add-section/add-section.compone
     NgxWebstorageModule.forRoot(),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    NgbModule
+    NgbModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ScrollingModule,
+    NgScrollbarModule
   ],
   providers: [
+    MatDatepickerModule,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

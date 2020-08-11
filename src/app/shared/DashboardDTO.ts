@@ -7,4 +7,7 @@ export interface DashboardDTO{
   sections: SectionDTO[];
   users: UserDTO[];
   creatorId: string;
+  sectionCreate: boolean;
+  dashboardLeaveFlag: boolean;
+  deleteDashboardFlag: boolean;
 }
