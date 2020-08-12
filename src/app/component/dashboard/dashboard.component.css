@@ -1,3 +1,12 @@
 .dropdown-toggle::after {
     display:none;
 }
+
+.add-section-form{
+  display: inline-block;
+}
+
+
+.add-card-form{
+  display: inline-block;
+}

@@ -3,6 +3,8 @@ import { UserService } from "../../shared/user.service";
 import { StorageService } from "../../shared/storage.service";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
+
 
 @Component({
   selector: 'app-add-dashboard',
@@ -17,7 +19,8 @@ export class AddDashboardComponent implements OnInit {
 
   constructor(private storage: StorageService,
     private userService: UserService,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService) { }
 
 
   ngOnInit(): void {
@@ -35,18 +38,24 @@ export class AddDashboardComponent implements OnInit {
   joinDashboard() {
     var id = this.joinForm.get('id').value;
     if (id.trim() !== '') {
-      this.userService.joinDashboard(id, this.storage.getUsername()).subscribe(data => { });
-      window.location.replace(window.location.origin + "/");
-      //this.router.navigateByUrl('/');
+      this.userService.joinDashboard(id, this.storage.getUsername()).subscribe(data => {
+        window.location.replace(window.location.origin + "/");
+      }, err => {
+        if (err.status === 404) {
+          this.toastr.error("Dashboard with this ID not found");
+        }
+      });
+
     }
   }
 
   createDashboard() {
     var title = this.createForm.get('title').value;
     if (title.trim() !== '') {
-      this.userService.createDashboard(title, this.storage.getUsername()).subscribe(data => { });
+      this.userService.createDashboard(title, this.storage.getUsername()).subscribe(data => { }, err => {
+        console.log(err.status);
+      });
       window.location.replace(window.location.origin + "/");
-      //this.router.navigateByUrl('/');
     }
   }
 

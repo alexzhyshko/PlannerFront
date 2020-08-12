@@ -9,8 +9,8 @@
     <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm btn-info text-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fas fa-sign-out-alt"></i></button>
     <button (click)="toggleDeleteDashboard(dashboard)" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash" aria-hidden="true"></i></button>
   </div>
-  <div *ngIf="dashboard.sectionCreate" class="card-body align-center border-info mt-n4">
-    <form class="form-inline my-2 align-center" [formGroup]="createSectionForm" (ngSubmit)="addSection(dashboard.id)">
+  <div *ngIf="dashboard.sectionCreate" class="card-body text-center border-info mt-n4">
+    <form class="form-inline my-2 align-center add-section-form" [formGroup]="createSectionForm" (ngSubmit)="addSection(dashboard.id)">
       <input [formControlName]="'sectionTitle'" class="form-control bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Section title" aria-label="Search" required>
       <button class="btn btn-sm bg-dark border-success text-success my-2 my-sm-0" type="submit">Add</button>
     </form>
@@ -27,27 +27,29 @@
     <button (click)="toggleDeleteDashboard(dashboard)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
     <button (click)="deleteDashboard(dashboard.id)" class="btn btn-sm bg-dark border-danger text-danger my-2 my-sm-0 ml-2" type="submit">Delete</button>
   </div>
-  <div class="card-title" *ngIf="activeSection!==undefined">
+  <div class="no-section-message text-center" *ngIf="activeSection===undefined && !dashboard.sectionCreate && !dashboard.dashboardLeaveFlag && !dashboard.deleteDashboardFlag">
+    <h1>There are no sections yet</h1>
+    <h2>Click <a class="btn btn-outline-secondary bg-dark btn-sm" disabled><i class="fa fa-plus"></i></a> above to add section</h2>
+  </div>
+  <div class="card-title text-center border-dark" style="border-bottom: 2px solid white; border-top: 2px solid white; padding-top: 10px;" *ngIf="activeSection!==undefined">
     <div ngbDropdown class=" text-center">
-      <button class="btn btn-outline-info text-light" id="dropdownMenuButton" ngbDropdownToggle>
+      <button class="btn btn-outline-info text-light text-center" id="dropdownMenuButton" ngbDropdownToggle>
         <i>{{activeSection.title}}</i>
       </button>
       <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
         <button ngbDropdownItem *ngFor="let section of dashboard.sections" (click)="changeActiveSection(section)">{{section.title}}</button>
       </div>
     </div>
-  </div>
-  <div class="section-container" *ngIf="activeSection!==undefined">
-    <div class="card-body text-center mt-n4">
-      <button (click)="toggleCreateCard(activeSection)" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button"><i class="fa fa-plus"></i></button>
-      <button (click)="toggleDeleteSection(activeSection)" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash" aria-hidden="true"></i></button>
+    <div class="card-body text-center">
+      <button (click)="toggleCreateCard(activeSection)" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button" title="Add a card to this section"><i class="fa fa-plus"></i></button>
+      <button (click)="toggleDeleteSection(activeSection)" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this section"><i class="fa fa-trash" aria-hidden="true"></i></button>
     </div>
-    <div *ngIf="activeSection.cardCreate" class="card-body align-center border-info mt-n4">
+    <div *ngIf="activeSection.cardCreate" class="card-body align-center border-info mt-n4 add-card-form">
       <form class="form-inline my-2 align-center" [formGroup]="createCardForm" (ngSubmit)="addCard(activeSection)">
         <input [formControlName]="'cardTitle'" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Title" aria-label="Search" required>
         <input [formControlName]="'cardDescription'" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Description" aria-label="Search" required>
         <input [formControlName]="'cardDueDate'" type="text" ngbDatepicker #d="ngbDatepicker" enabled="false" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-2" placeholder="yyyy-MM-dd" required />
-        <button type="button" (click)="d.toggle()" class="btn btn-sm btn-outline-info mr-2 ml-2"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+        <button type="button" (click)="d.toggle()" class="btn btn-sm btn-outline-info bg-dark mr-2 ml-2"><i class="fa fa-calendar" aria-hidden="true"></i></button>
         <button class="btn btn-sm bg-dark border-success text-success my-2 my-sm-0" type="submit">Add</button>
       </form>
     </div>
@@ -57,6 +59,12 @@
       <button (click)="toggleDeleteSection(activeSection)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
       <button (click)="deleteSection(activeSection)" class="btn btn-sm bg-dark border-danger text-danger my-2 my-sm-0 ml-2" type="submit">Delete</button>
     </div>
+    <div class="no-cards-message text-center" *ngIf="activeSection.cards.length===0 && !activeSection.cardCreate && !activeSection.deleteSectionFlag">
+      <h1>There are no cards yet</h1>
+      <h2>Click <a class="btn btn-outline-secondary bg-dark btn-sm" disabled><i class="fa fa-plus"></i></a> above to add card</h2>
+    </div>
+  </div>
+  <div class="section-container" *ngIf="activeSection!==undefined">
     <div class="card-columns ml-4 mr-4">
       <div *ngFor="let card of activeSection.cards" class="card bg-dark text-light border-info ml-2">
         <div class="card-header text-center" style="height: 100px;">
@@ -66,8 +74,6 @@
           <p class="card-text">{{card.description}}</p>
         </div>
         <div class="card-footer" *ngIf="card.date!==null">
-          <!--Due {{card.date.day+" "+card.date.month+" "+card.date.year}}-->
-          <!--Due {{card.date[2]+" "card.date[1]+" "+card.date[0]}}-->
           Due {{((""+card.date[2]).length==1?"0"+card.date[2]:card.date[2])+"-"+((""+card.date[1]).length==1?("0"+card.date[1]):card.date[1])+"-"+card.date[0]}}
         </div>
         <div class="card-footer" *ngIf="card.date===null">
@@ -76,8 +82,4 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="no-section-message text-center" *ngIf="activeSection===undefined">
-    <h1>There are no sections yet</h1>
-    <h2>Click <a class="btn btn-outline-secondary bg-dark btn-sm" disabled><i class="fa fa-plus"></i></a> above to add section</h2>
   </div>
