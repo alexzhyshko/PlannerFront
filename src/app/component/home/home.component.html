@@ -4,7 +4,7 @@
   </div>
   <div style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3" *ngFor="let dashboard of dashboards ">
     <div role="button" (click)="loadDashboard(dashboard.id)" class="card-header" title="Click to open dashboard">
-      <h2>{{dashboard.title}}</h2>
+      <h1 class="card-text pb-n2">{{dashboard.title}}</h1>
     </div>
     <div role="text" *ngIf="dashboard.sections.length===0" class="card-body border-info">
       No content yet
@@ -22,7 +22,7 @@
     </div>
     <div class="card-footer">
       <button (click)="toggleCreateSection(dashboard)" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button" title="Add a section to this dashboard"><i class="fa fa-plus"></i></button>
-      <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm btn-info text-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+      <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm btn-info text-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fas fa-sign-out-alt"></i></button>
       <button (click)="toggleDeleteDashboard(dashboard)" *ngIf="user.id === dashboard.creatorId" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash"
           aria-hidden="true"></i></button>
     </div>

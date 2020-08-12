@@ -28,6 +28,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { SidebarComponent } from './component/dashboard/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     DashboardComponent,
     SectionComponent,
     AddDashboardComponent,
-    AddSectionComponent
+    AddSectionComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

@@ -7,9 +7,10 @@ import { SectionDTO } from "../../shared/SectionDTO";
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/user.service";
+import { SectionService } from "../../shared/section.service";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgScrollbar } from 'ngx-scrollbar';
-
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { NgScrollbar } from 'ngx-scrollbar';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
 
   @ViewChild(NgScrollbar, { static: true }) scrollbar: NgScrollbar;
   errMsg: boolean = true;
@@ -25,17 +26,26 @@ export class DashboardComponent implements OnInit{
   user: UserDTO;
   id: string;
   createSectionForm: FormGroup;
+  createCardForm: FormGroup;
+  activeSection: SectionDTO = undefined;
 
   constructor(private dashboardService: DashboardService,
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private cd: ChangeDetectorRef,
+    private sectionService: SectionService) {
     this.userService.getCurrentUser().subscribe(data => {
       this.user = data;
     });
     this.createSectionForm = new FormGroup({
-      title: new FormControl('', Validators.min(1))
+      sectionTitle: new FormControl('', Validators.min(1))
+    });
+    this.createCardForm = new FormGroup({
+      cardTitle: new FormControl('', Validators.min(1)),
+      cardDescription: new FormControl('', Validators.min(1)),
+      cardDueDate: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10)])
     });
   }
 
@@ -47,8 +57,16 @@ export class DashboardComponent implements OnInit{
       });
     this.dashboardService.getDashboardById(this.id).subscribe(data => {
       this.dashboard = data;
+      this.activeSection = this.dashboard.sections[0];
       this.errMsg = false;
     });
+
+
+  }
+
+  changeActiveSection(section: SectionDTO) {
+    this.activeSection = section;
+    this.cd.detectChanges();
   }
 
   loadSection(id: string) {
@@ -67,7 +85,7 @@ export class DashboardComponent implements OnInit{
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    this.toastr.success('Copied');
+    this.toastr.success('ID copied to clipboard');
   }
 
   toggleCreateSection(dashboard: DashboardDTO) {
@@ -97,9 +115,27 @@ export class DashboardComponent implements OnInit{
   }
 
   addSection(dashboardid: string) {
-    var title = this.createSectionForm.get('title').value;
+    var title = this.createSectionForm.get('sectionTitle').value;
     if (title.trim() !== '') {
       this.dashboardService.addSection(dashboardid, title).subscribe(data => { });
+      window.location.reload();
+    }
+  }
+
+  addCard(section: SectionDTO) {
+    var title = this.createCardForm.get('cardTitle').value;
+    var desc = this.createCardForm.get('cardDescription').value;
+    var dateObj = this.createCardForm.get('cardDueDate').value;
+
+
+
+    var year = String(dateObj.year);
+    var month = (String(dateObj.month).length==1?("0"+String(dateObj.month)):String(dateObj.month));
+    var day = (String(dateObj.day).length==1?"0"+String(dateObj.day):String(dateObj.day));
+    var due = year+"-"+month+"-"+day;
+    var sectionid = section.id;
+    if (title.trim() !== '' && year.trim() !== ''&& month.trim() !== ''&& day.trim() !== '' && due.trim() !== '') {
+      this.sectionService.addCard(sectionid, title, desc, due).subscribe(data => { });
       window.location.reload();
     }
   }
@@ -110,7 +146,7 @@ export class DashboardComponent implements OnInit{
   }
 
   deleteSection(section: SectionDTO) {
-    console.log("del");
+    console.log(section);
 
     this.dashboardService.deleteSection(section.id).subscribe(data => { });
     window.location.reload();

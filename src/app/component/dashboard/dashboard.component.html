@@ -1,67 +1,83 @@
-<h1 *ngIf="errMsg">404 Dashboard not found</h1>
-<div class="title ml-4 mt-4 mb-4">
-  <h1>{{dashboard.title}} <button class="btn btn-sm btn-dark border-info text-info mb-2" type="button" name="button" title="Click to copy ID to dashboard" (click)="copyIdToClipboard(dashboard.id)">ID <i class="fa fa-clipboard"></i></button></h1>
-  <button (click)="toggleCreateSection(dashboard)" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button"><i class="fa fa-plus"></i></button>
-  <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm btn-info text-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
-  <button (click)="toggleDeleteDashboard(dashboard)" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash" aria-hidden="true"></i></button>
-</div>
-  <div class="content overflow-auto w-100">
-    <div *ngIf="dashboard.sectionCreate" class="card-body border-info mt-n4">
-      <form class="form-inline my-2 my-lg-0" [formGroup]="createSectionForm" (ngSubmit)="addSection(dashboard.id)">
-        <input [formControlName]="'title'" class="form-control bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Section title" aria-label="Search" required>
+  <h1 *ngIf="errMsg">404 Dashboard not found</h1>
+  <div class="title text-center ml-4 mt-4 mb-4">
+    <span class="card-title display-4">{{dashboard.title}} <button class="btn btn-sm btn-dark border-info text-info mb-2" type="button" name="button" title="Click to copy ID to dashboard" (click)="copyIdToClipboard(dashboard.id)">ID <i
+          class="fa fa-clipboard"></i></button>
+    </span>
+  </div>
+  <div class="card-body text-center mt-n4">
+    <button (click)="toggleCreateSection(dashboard)" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button"><i class="fa fa-plus"></i></button>
+    <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm btn-info text-info bg-dark" style="margin-right: 10px;" role="button" type="button" title="Leave this dashboard"><i class="fas fa-sign-out-alt"></i></button>
+    <button (click)="toggleDeleteDashboard(dashboard)" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash" aria-hidden="true"></i></button>
+  </div>
+  <div *ngIf="dashboard.sectionCreate" class="card-body align-center border-info mt-n4">
+    <form class="form-inline my-2 align-center" [formGroup]="createSectionForm" (ngSubmit)="addSection(dashboard.id)">
+      <input [formControlName]="'sectionTitle'" class="form-control bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Section title" aria-label="Search" required>
+      <button class="btn btn-sm bg-dark border-success text-success my-2 my-sm-0" type="submit">Add</button>
+    </form>
+  </div>
+  <div *ngIf="dashboard.dashboardLeaveFlag" class="card-body text-center border-info mt-n4">
+    <p class="card-text mb-n3">Are you sure you want to leave this dashboard?</p>
+    <br>
+    <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
+    <button (click)="leaveDashboard(dashboard.id, user.id)" class="btn btn-sm bg-dark border-info text-info my-2 my-sm-0 ml-2" type="submit">Leave</button>
+  </div>
+  <div *ngIf="dashboard.deleteDashboardFlag" class="card-body text-center border-info mt-n4">
+    <p class="card-text mb-n3">Are you sure you want to delete this dashboard?</p>
+    <br>
+    <button (click)="toggleDeleteDashboard(dashboard)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
+    <button (click)="deleteDashboard(dashboard.id)" class="btn btn-sm bg-dark border-danger text-danger my-2 my-sm-0 ml-2" type="submit">Delete</button>
+  </div>
+  <div class="card-title" *ngIf="activeSection!==undefined">
+    <div ngbDropdown class=" text-center">
+      <button class="btn btn-outline-info text-light" id="dropdownMenuButton" ngbDropdownToggle>
+        <i>{{activeSection.title}}</i>
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
+        <button ngbDropdownItem *ngFor="let section of dashboard.sections" (click)="changeActiveSection(section)">{{section.title}}</button>
+      </div>
+    </div>
+  </div>
+  <div class="section-container" *ngIf="activeSection!==undefined">
+    <div class="card-body text-center mt-n4">
+      <button (click)="toggleCreateCard(activeSection)" class="btn btn-sm btn-success text-success bg-dark" style="margin-right: 10px;" role="button" type="button"><i class="fa fa-plus"></i></button>
+      <button (click)="toggleDeleteSection(activeSection)" class="btn btn-sm btn-danger text-danger bg-dark" style="margin-right: 10px;" role="button" type="button" title="Delete this dashboard"><i class="fa fa-trash" aria-hidden="true"></i></button>
+    </div>
+    <div *ngIf="activeSection.cardCreate" class="card-body align-center border-info mt-n4">
+      <form class="form-inline my-2 align-center" [formGroup]="createCardForm" (ngSubmit)="addCard(activeSection)">
+        <input [formControlName]="'cardTitle'" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Title" aria-label="Search" required>
+        <input [formControlName]="'cardDescription'" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-2" type="search" placeholder="Description" aria-label="Search" required>
+        <input [formControlName]="'cardDueDate'" type="text" ngbDatepicker #d="ngbDatepicker" enabled="false" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-2" placeholder="yyyy-MM-dd" required />
+        <button type="button" (click)="d.toggle()" class="btn btn-sm btn-outline-info mr-2 ml-2"><i class="fa fa-calendar" aria-hidden="true"></i></button>
         <button class="btn btn-sm bg-dark border-success text-success my-2 my-sm-0" type="submit">Add</button>
       </form>
     </div>
-    <div *ngIf="dashboard.dashboardLeaveFlag" class="card-body border-info  mt-n4">
-      <p class="card-text mb-n3">Are you sure?</p>
+    <div *ngIf="activeSection.deleteSectionFlag" class="card-body text-center border-info mt-n4">
+      <p class="card-text mb-n3">Are you sure you want to delete this section?</p>
       <br>
-      <button (click)="toggleLeaveDashboard(dashboard)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
-      <button (click)="leaveDashboard(dashboard.id, user.id)" class="btn btn-sm bg-dark border-info text-info my-2 my-sm-0 ml-2" type="submit">Leave</button>
+      <button (click)="toggleDeleteSection(activeSection)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
+      <button (click)="deleteSection(activeSection)" class="btn btn-sm bg-dark border-danger text-danger my-2 my-sm-0 ml-2" type="submit">Delete</button>
     </div>
-    <div *ngIf="dashboard.deleteDashboardFlag" class="card-body border-info mt-n4">
-      <p class="card-text mb-n3">Are you sure?</p>
-      <br>
-      <button (click)="toggleDeleteDashboard(dashboard)" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
-      <button (click)="deleteDashboard(dashboard.id)" class="btn btn-sm bg-dark border-danger text-danger my-2 my-sm-0 ml-2" type="submit">Delete</button>
-    </div>
-    <div class="row flex-nowrap mr-1 ml-1">
-      <div class="col-6 card bg-dark border-info vw-25 mh-100" *ngFor="let section of dashboard.sections">
-        <div class="card-header bg-dark border-info text-light text-center">
-          <div class="row">
-            <div class="col-1 bg-danger">
-              <button (click)="toggleCreateCard(section);" class="btn btn-sm bg-dark border-success text-success ml-n2 mb-1" type="button" name="button" title="Add a card"><i class="fa fa-plus"></i></button>
-              <button (click)="toggleDeleteSection(section);" *ngIf="user.id === dashboard.creatorId" class="btn btn-sm bg-dark border-danger text-danger ml-n2" role="button" type="button" title="Delete this section"><i class="fa fa-trash"
-                  aria-hidden="true"></i></button>
-            </div>
-            <div class="col-10 text-center">
-              <p class="card-text">
-              <h1>{{section.title}}</h1>
-            </div>
-          </div>
+    <div class="card-columns ml-4 mr-4">
+      <div *ngFor="let card of activeSection.cards" class="card bg-dark text-light border-info ml-2">
+        <div class="card-header text-center" style="height: 100px;">
+          <h2 class=" bg-dark">{{card.title}}</h2>
         </div>
-        <div *ngIf="section.cardCreate" class="card-body border-info">
-          <form class="form-inline my-2 my-lg-0" [formGroup]="createSectionForm" (ngSubmit)="addCard(section.id)">
-            <input [formControlName]="'title'" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-1 ml-n1" type="search" placeholder="Card title" aria-label="Search" required>
-            <input [formControlName]="'description'" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-1" type="search" placeholder="Description" aria-label="Search" required>
-            <input matInput [matDatepicker]="picker" class="form-control form-control-sm bg-dark text-light input-sm mr-sm-1" (focus)="picker.open()" placeholder="Deadline date" required>
-            <mat-datepicker #picker></mat-datepicker>
-            <button class="btn btn-sm bg-dark border-info text-info my-2 my-sm-0" type="submit">Add</button>
-          </form>
+        <div class="card-body">
+          <p class="card-text">{{card.description}}</p>
         </div>
-        <div *ngIf="section.deleteSectionFlag" class="card-body border-info mt-n2">
-          <p class="card-text mb-n3 text-light">Are you sure?</p>
-          <br>
-          <button (click)="toggleDeleteSection(section);" class="btn btn-sm bg-dark border-secondary text-secondary my-2 my-sm-0" type="submit">Cancel</button>
-          <button (click)="deleteSection(section)" class="btn btn-sm bg-dark border-danger text-danger my-2 my-sm-0 ml-2" type="submit">Delete</button>
+        <div class="card-footer" *ngIf="card.date!==null">
+          <!--Due {{card.date.day+" "+card.date.month+" "+card.date.year}}-->
+          <!--Due {{card.date[2]+" "card.date[1]+" "+card.date[0]}}-->
+          Due {{((""+card.date[2]).length==1?"0"+card.date[2]:card.date[2])+"-"+((""+card.date[1]).length==1?("0"+card.date[1]):card.date[1])+"-"+card.date[0]}}
         </div>
-        <div class="card-body bg-dark text-light text-center" *ngIf="section.cards.length===0">
-          No cards yet
-        </div>
-        <div class="card bg-dark border-0 text-light" *ngFor="let card of section.cards">
-          <div class="card-header bg-dark">{{card.title}}</div>
-          <div class="card-body bg-dark "></div>
-          <div class="card-footer bg-dark border-info"></div>
+        <div class="card-footer" *ngIf="card.date===null">
+          <!--Due {{card.date.day+" "+card.date.month+" "+card.date.year}}-->
+          No deadline
         </div>
       </div>
     </div>
+  </div>
+  <div class="no-section-message text-center" *ngIf="activeSection===undefined">
+    <h1>There are no sections yet</h1>
+    <h2>Click <a class="btn btn-outline-secondary bg-dark btn-sm" disabled><i class="fa fa-plus"></i></a> above to add section</h2>
   </div>

@@ -9,7 +9,7 @@
     </div>
     <div *ngIf="isLoggedIn" class="btn-group float-right" role="group">
       <button type="button" class="btn btn-secondary btn-sm float-right" (click)="goToUserProfile()"><a class="btn btn-sm btn-info" style="border-radius: 70%;">{{user.username[0].toUpperCase()}} </a> {{user.username}}</button>
-      <button type="button" class="btn btn-secondary btn-sm float-right" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-secondary btn-sm float-right" (click)="logout()"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </div>
 </nav>
