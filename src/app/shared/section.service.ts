@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { SectionDTO } from "./SectionDTO";
+import { CardDTO } from "./CardDTO";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "./storage.service";
 import { CreateCardPayload } from "./create-card.payload";
+import { SectionCardPayload } from "./section-card.payload";
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +27,15 @@ export class SectionService {
       description: desc,
       date: due
     }
-    console.log(createCardPayload);
-
     return this.httpClient.post(this.baseUrl+'/section/createCard/'+sectionid, createCardPayload);
   }
+
+  deleteCard(section: SectionDTO, card: CardDTO): Observable<any>{
+    const sectionCardPayload = {
+      cardid: card.id,
+      sectionid: section.id
+    }
+    return this.httpClient.post(this.baseUrl+'/section/removeCard', sectionCardPayload);
+  }
+
 }

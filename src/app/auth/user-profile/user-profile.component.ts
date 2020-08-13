@@ -13,13 +13,26 @@ export class UserProfileComponent implements OnInit {
   errMsg: boolean = true;
   user: UserDTO;
 
-  constructor(private authService: AuthService, private userService: UserService) { }
+  constructor(private authService: AuthService, private userService: UserService) {
+    if (!this.isLoggedIn()) {
+      window.location.replace("/");
+      return;
+    }
+  }
 
   ngOnInit(): void {
+    if(!this.isLoggedIn()){
+      window.location.replace("/");
+    }
     this.userService.getCurrentUser().subscribe(data=>{
       this.user = data;
       this.errMsg = false;
     });
+  }
+
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
 }

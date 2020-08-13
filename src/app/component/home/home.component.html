@@ -1,6 +1,9 @@
 <div class="pr-4 pl-4">
-  <div role="button" style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3">
+  <div role="button" style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3" *ngIf="isLoggedIn()">
     <button type="button" (click)="addDashboard()" style="margin-right: 10px;" class="btn btn-lg btn-dark"><i class="text-info fa fa-plus"></i></button>
+  </div>
+  <div role="button" style="margin-top: 15px;" class="card text-white text-center bg-dark border-info mb-3" *ngIf="!isLoggedIn()">
+    <h1 class="pt-2">Log in or sign up to start using Planner</h1>
   </div>
   <div style="margin-top: 15px;" class="card text-white bg-dark border-info mb-3" *ngFor="let dashboard of dashboards ">
     <div role="button" (click)="loadDashboard(dashboard.id)" class="card-header" title="Click to open dashboard">

@@ -20,7 +20,6 @@ import { HomeComponent } from './component/home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserProfileComponent } from './auth/user-profile/user-profile.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
-import { SectionComponent } from './component/section/section.component';
 import { AddDashboardComponent } from './component/add-dashboard/add-dashboard.component';
 import { AddSectionComponent } from './component/add-section/add-section.component';
 
@@ -39,7 +38,6 @@ import { SidebarComponent } from './component/dashboard/sidebar/sidebar.componen
     HomeComponent,
     UserProfileComponent,
     DashboardComponent,
-    SectionComponent,
     AddDashboardComponent,
     AddSectionComponent,
     SidebarComponent

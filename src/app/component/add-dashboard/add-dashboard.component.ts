@@ -38,13 +38,18 @@ export class AddDashboardComponent implements OnInit {
   joinDashboard() {
     var id = this.joinForm.get('id').value;
     if (id.trim() !== '') {
-      this.userService.joinDashboard(id, this.storage.getUsername()).subscribe(data => {
-        window.location.replace(window.location.origin + "/");
-      }, err => {
+      return this.userService.joinDashboard(id, this.storage.getUsername()).subscribe(data => {}, err => {
         if (err.status === 404) {
           this.toastr.error("Dashboard with this ID not found");
+          return;
+        }else if(err.status===201){
+          window.location.replace(window.location.origin + "/");
+          this.toastr.success("Joined dashboard");
+        }else if(err.status===409){
+          this.toastr.error("You are already member of this dashboard");
         }
       });
+
 
     }
   }

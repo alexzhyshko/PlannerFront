@@ -1,12 +1,33 @@
-.dropdown-toggle::after {
+.no-dropdown-sign::after {
     display:none;
+}
+
+.outline{
+  border: 2px solid #343a40;
+  border-radius: 5px;
+}
+
+.inline{
+  display: inline-block;
 }
 
 .add-section-form{
   display: inline-block;
+  border: 2px solid #343a40;
+  border-radius: 5px;
 }
 
 
 .add-card-form{
   display: inline-block;
+  border: 2px solid #343a40;
+  border-radius: 5px;
+}
+
+ul{
+  display: inline-block;
+  list-style: none;
+}
+ul > li{
+  display: inline;
 }

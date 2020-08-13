@@ -6,6 +6,7 @@ import { DashboardDTO } from "../../shared/DashboardDTO";
 import { UserDTO } from "../../shared/UserDTO";
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from "../../auth/shared/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -22,12 +23,12 @@ export class HomeComponent implements OnInit {
   createSectionForm: FormGroup;
 
 
-  constructor(private storage: StorageService,
+  constructor(private authService: AuthService,
+    private storage: StorageService,
     private userService: UserService,
     private dashboardService: DashboardService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
-
     this.createSectionForm = new FormGroup({
       title: new FormControl('', Validators.min(1))
     });
@@ -79,6 +80,10 @@ export class HomeComponent implements OnInit {
 
   addDashboard() {
     this.router.navigateByUrl("/add-dashboard");
+  }
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
 }

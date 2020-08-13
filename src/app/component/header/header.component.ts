@@ -11,7 +11,7 @@ import { UserDTO } from "../../shared/UserDTO";
 })
 export class HeaderComponent implements OnInit {
 
-  isLoggedIn = true;
+  isLoggedIn = false;
   user: UserDTO;
 
   constructor(private authService: AuthService, private router: Router,
@@ -27,6 +27,11 @@ export class HeaderComponent implements OnInit {
 
   goToUserProfile(){
     this.router.navigateByUrl("/profile");
+  }
+
+  logout(){
+    this.authService.logout();
+    window.location.replace("/");
   }
 
 }

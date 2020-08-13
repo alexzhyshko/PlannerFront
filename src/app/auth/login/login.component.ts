@@ -49,9 +49,8 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginRequestPayload).subscribe(data => {
       if (data) {
         this.isError = false;
-        this.router.navigate(['/'], {queryParams: {loggedIn: true}})
         this.toastr.success('Login Successful');
-
+        window.location.replace("/");
       } else {
         this.isError = true;
       }

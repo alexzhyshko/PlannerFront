@@ -6,6 +6,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { LoginRequestPayload } from '../login/login-request.payload';
 import { LoginResponse } from '../login/login-response.payload';
 import { map, tap } from 'rxjs/operators';
+import { LogoutPayload } from "./logout.payload";
 
 @Injectable({
   providedIn: 'root'
@@ -63,5 +64,16 @@ export class AuthService {
 
   isLoggedIn(): boolean{
     return this.getJwtToken() != null;
+  }
+
+  logout(){
+    var refreshToken = this.getRefreshToken();
+    var username = this.getUserName();
+    this.localStorage.clear();
+    const logoutPayload = {
+      refreshToken: refreshToken,
+      username: username
+    }
+    this.httpClient.post("http://localhost:8080/api/auth/logout", logoutPayload);
   }
 }
