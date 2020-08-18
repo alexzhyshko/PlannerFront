@@ -1,7 +1,7 @@
   <h1 *ngIf="errMsg">404 Dashboard not found</h1>
-  <ul class="nav nav-pills bg-dark w-100 pb-2">
+  <ul class="nav nav-pills text-right bg-dark w-100 pb-2 pr-3">
     <li ngbDropdown class="text-center nav-item">
-      <button class="btn btn-secondary btn-sm text-center dropdown-sign ml-2" id="dropdownMenuButton" ngbDropdownToggle>
+      <button class="btn bg-dark border-info text-info btn-sm text-center dropdown-sign ml-2" id="dropdownMenuButton" ngbDropdownToggle>
         <span>Actions</span>
       </button>
       <div ngbDropdownMenu aria-labelledby="dropdownMenuButton" class="bg-dark pl-2 pr-2">
@@ -102,6 +102,9 @@
         </div>
         <div class="card-footer" *ngIf="card.date===null">
           No deadline
+        </div>
+        <div class="card-footer" *ngIf="card.workers.length==0 && card.workers.length<3">
+          <i class="text text-muted bg-dark text-info border-info">Such a lonely card</i> 😢
         </div>
         <div class="card-footer" *ngIf="card.workers.length>0 && card.workers.length<3">
           <i class="text text-muted">Users: </i> <i class="text text-muted bg-dark text-info border-info" *ngFor="let user of card.workers">{{user.username}}</i>

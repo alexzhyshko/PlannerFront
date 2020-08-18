@@ -1,4 +1,33 @@
 <h1 *ngIf="errMsg">404 User not found</h1>
 <h1>{{user.username}}</h1>
 <h5>{{user.id}}</h5>
-<h3 *ngFor="let card of user.cards">{{card.title}}</h3>
+<div class="card-columns ml-4 mr-4">
+  <div *ngFor="let card of user.cards" class="card bg-dark text-light border-info ml-2">
+    <div class="card-header text-center" style="height: 100px;">
+      <span ngbDropdown>
+        <button class="btn bg-dark btn-sm text-light text-center dropdown-sign ml-2 h2" id="dropdownMenuButton" ngbDropdownToggle>
+          <span class="text-center h2 ">{{card.title}}</span>
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdownMenuButton" class="bg-dark pl-2 pr-2 text-center">
+          <button ngbDropdownItem ngbDropdownToggle class="btn btn-sm bg-dark border-info text-info no-dropdown-sign w-100" (click)="leaveCard(user, card)">Leave card</button>
+          <button ngbDropdownItem ngbDropdownToggle class="btn btn-sm bg-dark border-info text-info no-dropdown-sign w-100" (click)="loadDashboardOfCard(user, card)">See in dashboard</button>
+        </div>
+      </span>
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{card.description}}</p>
+    </div>
+    <div class="card-footer" *ngIf="card.date!==null">
+      Due {{((""+card.date[2]).length==1?"0"+card.date[2]:card.date[2])+"-"+((""+card.date[1]).length==1?("0"+card.date[1]):card.date[1])+"-"+card.date[0]}}
+    </div>
+    <div class="card-footer" *ngIf="card.date===null">
+      No deadline
+    </div>
+    <div class="card-footer" *ngIf="card.workers.length>0 && card.workers.length<3">
+      <i class="text text-muted">Users: </i> <i class="text text-muted bg-dark text-info border-info" *ngFor="let user of card.workers">{{user.username}}</i>
+    </div>
+    <div class="card-footer" *ngIf="card.workers.length>3">
+      <i class="text text-muted">Users: </i> <i class="text text-muted bg-dark text-info border-info">{{card.workers[0].username}} {{card.workers[1].username}} {{card.workers[2].username}} and {{card.workers.length-3}} more...</i>
+    </div>
+  </div>
+</div>

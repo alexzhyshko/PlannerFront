@@ -42,6 +42,14 @@ export class UserService {
     return this.httpClient.post(this.baseUrl+"/user/joinDashboard", joinDashboardPayload);
   }
 
+  clearNotifications(user: UserDTO) {
+    return this.httpClient.get(this.baseUrl+"/user/clearAllNotifications/"+user.id);
+  }
+
+
+  readAllNotifications(user: UserDTO): Observable<any>{
+    return this.httpClient.get(this.baseUrl+"/user/readAllNotifications/"+user.id);
+  }
 
 
 

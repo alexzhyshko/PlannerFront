@@ -28,6 +28,8 @@ export class CardService {
       cardid: card.id,
       userid: user.id
     }
+    console.log(userCardPayload);
+
     return this.httpClient.post(this.baseUrl+"/card/userLeaveCard", userCardPayload);
   }
 

@@ -4,6 +4,7 @@ export interface NotificationDTO{
   id: string;
   title: string;
   text: string;
-  isSeen: boolean;
+  seen: boolean;
   owner: UserDTO;
+  created: Date;
 }

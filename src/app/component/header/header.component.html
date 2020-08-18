@@ -7,6 +7,28 @@
       <button type="button" class="btn btn-light btn-sm" routerLink="/login">Login</button>
       <button type="button" class="btn btn-secondary btn-sm" routerLink="/signup">Sign up</button>
     </div>
+
+    <div ngbDropdown ngbDropdownToggle class="btn btn-sm bg-dark text-center no-dropdown-sign ng-dropdown-panel" *ngIf="isLoggedIn" (click)="readAllNotifications(user)">
+      <span class="no-dropdown-sign">
+        <button *ngIf="hasNotReadNotifications" class="btn btn-sm text-danger text-center no-dropdown-sign">
+          <i class="fas fa-bell"></i>
+        </button>
+        <button *ngIf="!hasNotReadNotifications" class="btn btn-sm text-light text-center no-dropdown-sign">
+          <i class="fas fa-bell"></i>
+        </button>
+      </span>
+      <div ngbDropdownMenu aria-labelledby="dropdownMenuButton" class="bg-dark dropdown-menu-right">
+        <ng-scrollbar *ngIf="user.notifications.length>0" aria-labelledby="dropdownMenuButton" class="bg-dark dropdown-menu-right" style="border: none;">
+          <div ngbDropdownItem *ngFor="let notification of user.notifications" class="text-light text-center notification  mt-1">
+            <small class="text-truncate">{{notification.title}}</small><span *ngIf="!notification.seen" class="dot bg-danger ml-2"></span><br><small class="text-truncate">{{notification.text}}</small>
+          </div>
+          <div ngbDropdownItem class="text-light text-center notification mt-1" (click)="clearNotifications(user)">
+            <span class="text-light text-muted">Clear</span>
+          </div>
+        </ng-scrollbar>
+        <span ngbDropdownItem *ngIf="user.notifications.length==0" class="text-light bg-dark text-muted">No notifications yet</span>
+      </div>
+    </div>
     <div *ngIf="isLoggedIn" class="btn-group float-right" role="group">
       <button type="button" class="btn btn-secondary btn-sm float-right" (click)="goToUserProfile()"><a class="btn btn-sm btn-info" style="border-radius: 70%;">{{user.username[0].toUpperCase()}} </a> {{user.username}}</button>
       <button type="button" class="btn btn-secondary btn-sm float-right" (click)="logout()"><i class="fas fa-sign-out-alt"></i></button>
